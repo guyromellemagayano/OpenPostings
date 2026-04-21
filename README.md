@@ -89,7 +89,7 @@ Choose the setup type during install:
 Once the installation is complete, you can launch OpenPostings from the start menu. 
 
 ## Docs
-- Docs: https://masterjx9.github.io/OpenPostings
+- Docs: https://masterjx9.github.io/OpenPostings/docs/intro
 
 ## Source Installation Setup
 
