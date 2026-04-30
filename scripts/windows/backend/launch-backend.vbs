@@ -3,18 +3,20 @@ Option Explicit
 Dim shell
 Dim filesystem
 Dim scriptDirectory
-Dim trayScriptPath
+Dim appDirectory
+Dim openPostingsPath
 Dim command
 
 Set shell = CreateObject("WScript.Shell")
 Set filesystem = CreateObject("Scripting.FileSystemObject")
 
 scriptDirectory = filesystem.GetParentFolderName(WScript.ScriptFullName)
-trayScriptPath = filesystem.BuildPath(scriptDirectory, "backend-tray.ps1")
+appDirectory = filesystem.GetParentFolderName(scriptDirectory)
+openPostingsPath = filesystem.BuildPath(appDirectory, "openpostings.exe")
 
-If Not filesystem.FileExists(trayScriptPath) Then
+If Not filesystem.FileExists(openPostingsPath) Then
   WScript.Quit 0
 End If
 
-command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File """ & trayScriptPath & """"
+command = """" & openPostingsPath & """ --backend-startup"
 shell.Run command, 0, False
