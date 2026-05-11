@@ -1,5 +1,31 @@
 ﻿# OpenPostings
 
+
+## Table of Contents
+
+- [OpenPostings](#openpostings)
+- [Youtube Video](#youtube-video)
+- [Diagram](#diagram)
+- [Features](#features)
+- [Supported ATS](#supported-ats)
+- [Docs](#docs)
+- [Android Install from Google PlayStore (In Beta Coming Soon...)](#android-install-from-google-playstore-in-beta-comming-soon)
+- [Android Phone/Device DIRECT Install](#android-phonedevice-direct-install-easiest-setup-but-still-wip-and-may-have-some-bugs)
+- [Windows Installer Setup (Windows 10/11)](#windows-installer-setup-windows-1011-easiest-setup-but-still-wip-and-may-have-some-bugs)
+- [Source Installation Setup](#source-installation-setup-best-stability--compatibility)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Quick Start (Web)](#quick-start-web)
+- [Chrome Extension](#chrome-extension-for-capturingadding-more-companies-to-your-app)
+  - [Load as Unpacked Extension](#load-as-unpacked-extension)
+  - [Run Backend + Extension](#run-backend--extension)
+  - [Example Supported Seeded URL Patterns](#example-supported-seeded-url-patterns)
+  - [Troubleshooting](#troubleshooting)
+- [REST API (Summary)](#rest-api-summary)
+- [MCP Apply Agent Server](#mcp-apply-agent-server)
+- [Security Notes](#security-notes)
+
+<br/>
 OpenPostings is an OpenSource ATS job aggregator and application tracking app. **It pulls jobs that were posted in the last 24 hours** or that has no posted date. 
 
 Over **100000+** companies from multiple ATSs all sourced into 1 location!
@@ -127,6 +153,9 @@ OVER **100000+** companies in total. All gathered from search engine data like G
 <br>
 It pulls in new job data at random from companies and stores it in the database. If the posting has lasted longer than 24 hours in the database its no longer used/deleted. 
 
+## Docs
+- Docs: https://masterjx9.github.io/OpenPostings/docs/intro
+
 ## Android Install from Google PlayStore (In Beta Comming Soon...)
 If you are interested in being a beta tester follow the Google Form here:
 
@@ -148,9 +177,6 @@ Choose the setup type during install:
 <img src="README-Images/windows_setup_type.png" alt="windows install setup types" width="70%" />
 
 Once the installation is complete, you can launch OpenPostings from the start menu. 
-
-## Docs
-- Docs: https://masterjx9.github.io/OpenPostings/docs/intro
 
 ## Source Installation Setup (Best Stability & Compatibility)
 
@@ -201,6 +227,61 @@ npm run windows (For windows)
 npm run android (For Android)
 ```
 
+## Chrome Extension (For Capturing/Adding more companies to your app)
+
+This repo includes a Chrome extension at:
+
+- `chrome-extension/openpostings-seeded-url-capture`
+
+It captures the active tab URL and submits it to OpenPostings as a **seeded ATS company source**.  
+Dynamic ATS sources are intentionally blocked.
+
+### Load as Unpacked Extension
+
+1. Open `chrome://extensions`.
+2. Enable `Developer mode`.
+3. Click `Load unpacked`.
+4. Select `OpenPostings/chrome-extension/openpostings-seeded-url-capture`. (The folder where the chrome extension is)
+
+### Run Backend + Extension
+
+1. Start backend:
+
+```powershell
+cd OpenPostings
+npm run server
+```
+
+NOTE: Or if you are using the Windows MSI installer version, just have your backend service set to `running`.
+
+2. Open a seeded ATS company board URL in Chrome.
+3. Open the extension popup.
+4. Confirm/edit:
+   - Backend API URL (default `http://localhost:8787`)
+   - Source URL and company name
+5. Click `Add to OpenPostings`.
+
+### Example Supported Seeded URL Patterns
+
+- Workday: `https://<subdomain>.wd*.myworkdayjobs.com/<companyPath>`
+- Ashby: `https://jobs.ashbyhq.com/<orgSlug>`
+- Greenhouse: `https://job-boards.greenhouse.io/<boardToken>` or `https://boards.greenhouse.io/<boardToken>`
+- Lever: `https://jobs.lever.co/<organization>`
+- iCIMS: `https://<tenant>.icims.com/jobs/search?...`
+- BambooHR: `https://<tenant>.bamboohr.com/careers`
+- Jobvite: `https://jobs.jobvite.com/<companySlug>/jobs`
+- It works for all 80+ ATSs!
+
+### Troubleshooting
+
+- `Failed to fetch`:
+  - Ensure backend is running at `http://localhost:8787`.
+  - If backend runs elsewhere, update backend URL in the extension popup.
+- `URL does not match a supported seeded ATS company source`:
+  - The current page is likely not a seeded ATS company board URL.
+- `Dynamic ATS URLs are not supported`:
+  - Expected behavior. This extension only inserts seeded ATS company sources.
+
 
 ## REST API (Summary)
 
@@ -233,6 +314,9 @@ Settings:
 - `GET /settings/sync`
 - `PUT /settings/sync`
 - `GET /settings/export`
+- `GET /extension/seeded-source/options`
+- `POST /extension/seeded-source/classify`
+- `POST /extension/seeded-source/upsert`
 
 MCP helper endpoints:
 
